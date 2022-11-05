@@ -1,17 +1,16 @@
-## H-W-SeleniumBase [![H](https://github.com/mybdye/H-W-SeleniumBase/actions/workflows/H.yml/badge.svg)](https://github.com/mybdye/H-W-SeleniumBase/actions/workflows/H.yml) [![W](https://github.com/mybdye/H-W-SeleniumBase/actions/workflows/W.yml/badge.svg)](https://github.com/mybdye/H-W-SeleniumBase/actions/workflows/W.yml)
+## A-reCAPTCHA
 Project for SeleniumBase study.
 
 #### ✏️ NOTE
-- 11.04 重新出发
+- 11.06 rebuild
   - [x] ~~helium/selenium/Playwright~~ >> SeleniumBase
   - [x] ~~MacOS/Windows~~ >> Ubuntu
-  * 每次运行时间约 2 分钟
+  * 每次运行时间约 1 分钟
 
 #### 🌟️ SUGGESTION
 ```diff
 !自定义schedule
-.github/workflows/H.yml
-.github/workflows/W.yml
+.github/workflows/main.yml
 
 例如：
 schedule:
@@ -32,7 +31,7 @@ schedule:
 #### ㊙️ SECRET
   |YOU SECRET NAME|YOU SECRET VALUE|
   |-----|--|
-  |`URL_BASE_H` or `URL_BASE_W`|网址，至少写一个，不要带有`https://` 和 `/` |
+  |`URL_BASE`|网址，不要带有`https://` 和 `/` |
   |`USERNAME`|你的用户名|
   |`PASSWORD`|你的密码|
   |`BARK_TOKEN`|(可选) api.day.app/`BARK_TOKEN`/ 详见 https://github.com/Finb/Bark|

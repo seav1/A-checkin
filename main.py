@@ -10,35 +10,35 @@ def recaptcha():
     print('- recaptcha')
     try:
         sb.open(urlLogin)
-        sb.assert_text('Login', 'h2', timeout=20)
+        sb.assert_text('首 页', 'div', timeout=20)
         print('- access')
     except Exception as e:
         print('👀 ', e, '\n try again!')
         sb.open(urlLogin)
-        sb.assert_text('Login', 'h2', timeout=20)
+        sb.assert_text('首 页', 'div', timeout=20)
         print('- access')
     #   reCAPTCHA
-    sb.switch_to_frame('[src*="https://www.recaptcha.net/recaptcha/api2/anchor?"]')
+    sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
     print('- switch to frame checkbox')
     checkbox = 'span#recaptcha-anchor'
     print('- click checkbox')
     sb.click(checkbox)
     sb.sleep(4)
     #   预防弹了广告
-    sb.switch_to_window(0)
-    sb.switch_to_frame('[src*="https://www.recaptcha.net/recaptcha/api2/anchor?"]')
+    #sb.switch_to_window(0)
+    #sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
     status = checkbox_status()
     tryReCAPTCHA = 1
     while status != 'true':
         sb.switch_to_default_content()  # Exit all iframes
         sb.sleep(1)
-        sb.switch_to_frame('[src*="https://www.recaptcha.net/recaptcha/api2/bframe?"]')
+        sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
         print('- switch to frame image/audio')
         sb.click("button#recaptcha-audio-button")
         try:
-            sb.assert_element('[href*="https://www.recaptcha.net/recaptcha/api2/payload/audio.mp3?"]')
+            sb.assert_element('[href*="recaptcha.net/recaptcha/api2/payload/audio.mp3?"]')
             print('- normal')
-            src = sb.find_elements('[href*="https://www.recaptcha.net/recaptcha/api2/payload/audio.mp3?"]'
+            src = sb.find_elements('[href*="recaptcha.net/recaptcha/api2/payload/audio.mp3?"]'
                                    )[0].get_attribute("href")
             print('- audio src:', src)
             # download audio file
@@ -46,15 +46,15 @@ def recaptcha():
             mp3_to_wav()
             text = speech_to_text()
             sb.switch_to_window(0)
-            sb.assert_text('Login', 'h2')
+            sb.assert_text('首 页', 'div', timeout=20)
             sb.switch_to_default_content()  # Exit all iframes
             sb.sleep(1)
-            sb.switch_to_frame('[src*="https://www.recaptcha.net/recaptcha/api2/bframe?"]')
+            sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
             sb.type('#audio-response', text)
             sb.click('button#recaptcha-verify-button')
             sb.sleep(4)
             sb.switch_to_default_content()  # Exit all iframes
-            sb.switch_to_frame('[src*="https://www.recaptcha.net/recaptcha/api2/anchor?"]')
+            sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
             sb.sleep(1)
             status = checkbox_status()
 
@@ -63,7 +63,7 @@ def recaptcha():
             body = e
             sb.switch_to_default_content()  # Exit all iframes
             sb.sleep(1)
-            sb.switch_to_frame('[src*="https://www.recaptcha.net/recaptcha/api2/bframe?"]')
+            sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
             msgBlock = '[class*="rc-doscaptcha-body-text"]'
             if sb.assert_element(msgBlock):
                 body = sb.get_text(msgBlock)
@@ -82,11 +82,12 @@ def login():
     print('- login')
     sb.switch_to_default_content()  # Exit all iframes
     sb.sleep(1)
-    sb.type('#text', username)
-    sb.type('#password', password)
-    sb.click('button:contains("Submit")')
-    sb.sleep(20)
-    sb.assert_exact_text('ACTIVE', '[class*="badge badge-success"]')
+    sb.type('#email', username)
+    sb.type('#passwd', password)
+    sb.click('#login')
+    sb.sleep(6)
+    #sb.assert_exact_text('用户中心', '[class*="badge badge-success"]')
+    sb.assert_text('用户中心', 'h1', timeout=20)
     print('- login success')
     return True
 
@@ -129,64 +130,24 @@ def speech_to_text():
     return text
 
 
-def renew():
-    global statuRenew
-    print('- renew')
-    sb.open(urlRenew)
-    print('- access')
-    sb.sleep(2)
-    #
-    print('- fill web_address')
-    sb.type('#web_address', urlBase)
-    #   captcha
-    number1 = int(sb.find_elements('img[src]')[0].get_attribute('src').split('-')[1][0])
-    number2 = int(sb.find_elements('img[src]')[1].get_attribute('src').split('-')[1][0])
-    method = sb.get_text('[class*="col-sm-3"]').split('=')[0]
-
-    if method == '+':
-        captcharesult = number1 + number2
-    elif method == '-':
-        # 应该没有 但还是写了
-        captcharesult = number1 - number2
-    elif method == 'X' or method == 'x':
-        captcharesult = number1 * number2
-    elif method == '/':
-        # 应该没有 但还是写了
-        captcharesult = number1 / number2
-
-    captcharesult = int(captcharesult)
-    print('- captcharesult: %d %s %d = %d' % (number1, method, number2, captcharesult))
-    #
-    print('- fill captcha')
-    sb.type('#captcha', captcharesult)
-    #
-    print('- check agreement')
-    sb.click('[name*="agreement"]')
-    #
-    print('- click Renew VPS')
-    sb.click('button:contains("Renew VPS")')
-    sb.sleep(5)
-    statuRenew = renew_check()
-
-
-def renew_check():
+def checkin():
     global body
-    print('- renew_check')
-    sb.assert_element('div#response')
-    print('- access')
-    body = sb.get_text('div#response')
-    i = 1
-    while body == 'Loading.....':
-        if i > 3:
-            break
-        print('- waiting for response... *', i)
-        sb.sleep(2)
-        body = sb.get_text('div#response')
-        i += 1
-    print('- response:', body)
-    if 'renew' in body:
-        body = '🎉 ' + body
-        return True
+    print('- checkin')
+    status = sb.get_text('[class*="card-action"]')
+    if '今日已签到' in status:
+        print('- 今日已签到')
+    elif '点我签到' in status:
+        sb.click('#checkin')
+        sb.sleep(3)
+        sb.open(urlUser)
+        sb.assert_text('用户中心', 'h1', timeout=20)
+    lastCheckin = sb.get_text('body > main > div.container > section > div:nth-child(2) > div.col-xx-12.col-sm-5 > div:nth-child(1) > div > div:nth-child(2) > p:nth-child(2)'
+                              , by='css selector')
+    trafficInfo = sb.get_text('#remain')
+    print('- lastCheckin:', lastCheckin)
+    print('- trafficInfo:', trafficInfo)
+    body = lastCheckin + '\n剩余流量：' + trafficInfo
+    return True
 
 
 def screenshot():
@@ -286,8 +247,8 @@ audioMP3 = '/' + urlBase + '.mp3'
 audioWAV = '/' + urlBase + '.wav'
 imgFile = urlBase + '.png'
 ##
-urlLogin = 'https://' + urlBase + '/login'
-urlRenew = 'https://' + urlBase + '/vps-renew'
+urlLogin = 'https://' + urlBase + '/auth/login'
+urlUser = 'https://' + urlBase + '/user'
 urlSpeech = url_decode(
     'aHR0cHM6Ly9henVyZS5taWNyb3NvZnQuY29tL2VuLXVzL3Byb2R1Y3RzL2NvZ25pdGl2ZS1zZXJ2aWNlcy9zcGVlY2gtdG8tdGV4dC8jZmVhdHVyZXM==')
 # 关闭证书验证
@@ -299,12 +260,7 @@ with SB(uc=True) as sb:  # By default, browser="chrome" if not set.
         try:
             if recaptcha():
                 if login():
-                    i = 1
-                    while not statuRenew:
-                        if i > 10:
-                            break
-                        renew()
-                        i += 1
+                    checkin()
         except Exception as e:
             print('💥', e)
             try:
