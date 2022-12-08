@@ -83,8 +83,8 @@ def login():
     sb.switch_to_default_content()  # Exit all iframes
     sb.sleep(1)
     sb.type('#email', username)
-    sb.type('#passwd', password)
-    sb.click('#login')
+    sb.type('input[type="password"]', password)
+    sb.click('button[type="submit"]')
     sb.sleep(6)
     #sb.assert_exact_text('用户中心', '[class*="badge badge-success"]')
     #sb.assert_text('用户中心', 'h1', timeout=20)
