@@ -140,9 +140,9 @@ def checkin():
         print('- 👀 checkin status:', e)
         status = sb.get_text('#checkin-div')
         
-    if '已' in status:
+    if '已' or '再' or '明' in status:
         print('- 今日已签到')
-    elif '已' not in status:
+    else:
         try:
             sb.click('#checkin')
         except Exception as e:
