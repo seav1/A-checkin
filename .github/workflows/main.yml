@@ -14,19 +14,34 @@ on:
 
 jobs:
   Checkin:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     # 超时设置
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Delete old workflow runs
+        uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
+        with:
+          repository: ${{ github.repository }}   # replace this with your own repository such as >> owner/repo
+          older-than-seconds: 86400          # remove all workflow runs older than 1 day >> 24*60*60=86400
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Setup FFmpeg using versions
         uses: Iamshankhadeep/setup-ffmpeg@v1.2
-      - name: 'Environment Settings'
+        with:
+          # Not strictly necessary, but it may prevent rate limit
+          # errors especially on GitHub-hosted macos machines.
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Environment
         run: |
           pip install --upgrade pip
           pip install -r ./requirements.txt
-      - name: 'Checkin'
+          
+      - name: Checkin
         env:
           URL_BASE: ${{ secrets.URL_BASE }}
           USERNAME: ${{ secrets.USERNAME }}
