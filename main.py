@@ -10,12 +10,12 @@ def recaptcha():
     print('- recaptcha')
     try:
         sb.open(urlLogin)
-        sb.assert_text('首 页', 'div', timeout=20)
+        sb.assert_element('#email', timeout=20)
         print('- access')
     except Exception as e:
         print('👀 ', e, '\n try again!')
         sb.open(urlLogin)
-        sb.assert_text('首 页', 'div', timeout=20)
+        sb.assert_element('#email', timeout=20)
         print('- access')
     #   reCAPTCHA
     sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
@@ -46,7 +46,7 @@ def recaptcha():
             mp3_to_wav()
             text = speech_to_text()
             sb.switch_to_window(0)
-            sb.assert_text('首 页', 'div', timeout=20)
+            sb.assert_element('#email', timeout=20)
             sb.switch_to_default_content()  # Exit all iframes
             sb.sleep(1)
             sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
@@ -87,7 +87,8 @@ def login():
     sb.click('#login')
     sb.sleep(6)
     #sb.assert_exact_text('用户中心', '[class*="badge badge-success"]')
-    sb.assert_text('用户中心', 'h1', timeout=20)
+    #sb.assert_text('用户中心', 'h1', timeout=20)
+    assert '/user' in sb.get_current_url()
     print('- login success')
     return True
 
@@ -133,20 +134,30 @@ def speech_to_text():
 def checkin():
     global body
     print('- checkin')
-    status = sb.get_text('[class*="card-action"]')
-    if '今日已签到' in status:
+    try:
+        status = sb.get_text('[class*="card-action"]')
+    except Exception as e:
+        print('- 👀 checkin status:', e)
+        status = sb.get_text('#checkin-div')
+        
+    if '已' in status:
         print('- 今日已签到')
-    elif '点我签到' in status:
-        sb.click('#checkin')
+    elif '已' not in status:
+        try:
+            sb.click('#checkin')
+        except Exception as e:
+            print('- 👀 checkin button:', e)
+            sb.click('a[onclick="checkin()"]')
         sb.sleep(3)
         sb.open(urlUser)
-        sb.assert_text('用户中心', 'h1', timeout=20)
-    lastCheckin = sb.get_text('body > main > div.container > section > div:nth-child(2) > div.col-xx-12.col-sm-5 > div:nth-child(1) > div > div:nth-child(2) > p:nth-child(2)'
-                              , by='css selector')
-    trafficInfo = sb.get_text('#remain')
-    print('- lastCheckin:', lastCheckin)
+        assert '/user' in sb.get_current_url()
+    try:
+        trafficInfo = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
+    except Exception as e:
+        print('- 👀 trafficInfo:', e)
+        trafficInfo = sb.get_text('#remain')
     print('- trafficInfo:', trafficInfo)
-    body = lastCheckin + '\n剩余流量：' + trafficInfo
+    body = '%s\n剩余流量：%s' % (status, trafficInfo)
     return True
 
 
