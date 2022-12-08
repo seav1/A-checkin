@@ -1,7 +1,7 @@
-## A-reCAPTCHA
-Project for SeleniumBase study.
+[![Checkin](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml/badge.svg)](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml)
 
 #### ✏️ NOTE
+- 12.08 compatible with 'ikuxx' and 'qsy'
 - 11.06 rebuild
   - [x] ~~helium/selenium/Playwright~~ >> SeleniumBase
   - [x] ~~MacOS/Windows~~ >> Ubuntu
