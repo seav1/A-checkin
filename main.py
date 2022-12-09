@@ -154,7 +154,7 @@ def checkin():
     except Exception as e:
         print('- 👀 checkin button:', e)
         sb.click('a[onclick="checkin()"]')
-    sb.sleep(3)
+    sb.sleep(5)
     sb.open(urlUser)
     assert '/user' in sb.get_current_url()
     try:
