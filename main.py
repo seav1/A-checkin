@@ -162,6 +162,11 @@ def trafficInfo():
     sb.open(urlUser)
     assert '/user' in sb.get_current_url()
     try:
+        sb.click('button[data-dismiss="modal"]')
+        print('- Read')
+    except Exception as e:
+        print('- 👀 msgbox:', e)
+    try:
         traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
     except Exception as e:
         print('- 👀 trafficInfo:', e)
@@ -282,6 +287,7 @@ with SB(uc=True) as sb:  # By default, browser="chrome" if not set.
                 if login():
                     if not checkinstatus():
                         checkin()
+                    sb.sleep(6)
                     body = body + '，' + trafficInfo()
         except Exception as e:
             print('💥', e)
