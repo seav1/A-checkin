@@ -131,6 +131,7 @@ def speech_to_text():
     return text
 
 def checkinstatus():
+    global body
     print('- checkinstatus')
     try:
         status = sb.get_text('[class*="card-action"]')
@@ -138,6 +139,7 @@ def checkinstatus():
         print('- 👀 checkin status:', e)
         status = sb.get_text('#checkin-div')
     print('- status:', status)
+    body = status
     if '已' in status or '再' in status or '明' in status:
         return True
     else:
