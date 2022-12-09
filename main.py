@@ -166,8 +166,10 @@ def trafficInfo():
         print('- Read')
     except Exception as e:
         print('- 👀 msgbox:', e)
+    sb.sleep(2)
     try:
-        traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
+        #traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
+        traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2)', by='css selector')
     except Exception as e:
         print('- 👀 trafficInfo:', e)
         traffic = sb.get_text('#remain')
@@ -287,7 +289,7 @@ with SB(uc=True) as sb:  # By default, browser="chrome" if not set.
                 if login():
                     if not checkinstatus():
                         checkin()
-                    sb.sleep(6)
+                    sb.sleep(2)
                     body = body + '，' + trafficInfo()
         except Exception as e:
             print('💥', e)
