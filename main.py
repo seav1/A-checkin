@@ -130,35 +130,39 @@ def speech_to_text():
         trySpeech += 1
     return text
 
-
-def checkin():
-    global body
-    print('- checkin')
+def checkinstatus():
+    print('- checkinstatus')
     try:
         status = sb.get_text('[class*="card-action"]')
     except Exception as e:
         print('- 👀 checkin status:', e)
         status = sb.get_text('#checkin-div')
+    print('- status:', status)
     if '已' in status or '再' in status or '明' in status:
-        print('- 👀 status:', status)
+        return True
     else:
-        try:
-            sb.click('#checkin')
-            print('- checkin clicked')
-        except Exception as e:
-            print('- 👀 checkin button:', e)
-            sb.click('a[onclick="checkin()"]')
-        sb.sleep(3)
-        sb.open(urlUser)
-        assert '/user' in sb.get_current_url()
+        return False
+
+def checkin():
+    global body
+    print('- checkin')
+    
+    try:
+        sb.click('#checkin')
+    except Exception as e:
+        print('- 👀 checkin button:', e)
+        sb.click('a[onclick="checkin()"]')
+    sb.sleep(3)
+    sb.open(urlUser)
+    assert '/user' in sb.get_current_url()
     try:
         trafficInfo = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
     except Exception as e:
         print('- 👀 trafficInfo:', e)
         trafficInfo = sb.get_text('#remain')
     print('- trafficInfo:', trafficInfo)
-    body = '%s\n剩余流量：%s' % (status, trafficInfo)
-    return True
+    body = '已签到，剩余流量：%s' % (trafficInfo)
+    return body
 
 
 def screenshot():
@@ -271,7 +275,8 @@ with SB(uc=True) as sb:  # By default, browser="chrome" if not set.
         try:
             if recaptcha():
                 if login():
-                    checkin()
+                    if not checkinstatus():
+                        checkin()
         except Exception as e:
             print('💥', e)
             try:
