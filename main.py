@@ -139,10 +139,11 @@ def checkinstatus():
         print('- 👀 checkin status:', e)
         status = sb.get_text('#checkin-div')
     print('- status:', status)
-    body = status
     if '已' in status or '再' in status or '明' in status:
+        body = status
         return True
     else:
+        body = '执行签到'
         return False
 
 def checkin():
@@ -154,17 +155,19 @@ def checkin():
     except Exception as e:
         print('- 👀 checkin button:', e)
         sb.click('a[onclick="checkin()"]')
-    sb.sleep(5)
+    print('- checkin clicked')
+        
+def trafficInfo():
+    print('- get traffic')
     sb.open(urlUser)
     assert '/user' in sb.get_current_url()
     try:
-        trafficInfo = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
+        traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
     except Exception as e:
         print('- 👀 trafficInfo:', e)
-        trafficInfo = sb.get_text('#remain')
-    print('- trafficInfo:', trafficInfo)
-    body = '已签到，剩余流量：%s' % (trafficInfo)
-    return body
+        traffic = sb.get_text('#remain')
+    print('- trafficInfo:', traffic)
+    return traffic
 
 
 def screenshot():
@@ -279,6 +282,7 @@ with SB(uc=True) as sb:  # By default, browser="chrome" if not set.
                 if login():
                     if not checkinstatus():
                         checkin()
+                    body = body + '，' + trafficInfo()
         except Exception as e:
             print('💥', e)
             try:
