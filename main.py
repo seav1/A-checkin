@@ -90,6 +90,7 @@ def login():
     #sb.assert_text('用户中心', 'h1', timeout=20)
     assert '/user' in sb.get_current_url()
     print('- login success')
+    dialogRead()
     return True
 
 
@@ -145,11 +146,17 @@ def checkinstatus():
     else:
         body = '执行签到'
         return False
-
+    
+def dialogRead():
+    print('- dialog read')
+    try:
+        sb.click('Read')
+    except Exception as e:
+        print('- 👀 dialog read:', e)
+        
 def checkin():
     global body
     print('- checkin')
-    
     try:
         sb.click('#checkin')
     except Exception as e:
@@ -161,11 +168,7 @@ def trafficInfo():
     print('- get traffic')
     sb.open(urlUser)
     assert '/user' in sb.get_current_url()
-    try:
-        sb.click('button[data-dismiss="modal"]')
-        print('- Read')
-    except Exception as e:
-        print('- 👀 msgbox:', e)
+    dialogRead()
     sb.sleep(2)
     try:
         #traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
