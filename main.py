@@ -124,7 +124,10 @@ def speech_to_text():
         sb.sleep(5)
         response = sb.get_text('[id*="speechout"]')
         print('- response:', response)
-        text = response.split('-' * 80)[1].split('\n')[1].replace('. ', '.')
+        try:
+            text = response.split('-' * 80)[1].split('\n')[1].replace('. ', '.')
+        except Exception as e:
+            print('- 👀 response.split:', e)
         print('- text:', text)
         if ' ' in text:
             break
