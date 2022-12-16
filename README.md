@@ -1,6 +1,7 @@
 [![Checkin](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml/badge.svg)](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml)
 #### ⏱️ TODO
   - [ ] 无 recaptcha 判断
+  - [ ] 多账号
 
 #### ✏️ NOTE
 - 12.08 compatible with 'ikuxx' and 'qsy'
