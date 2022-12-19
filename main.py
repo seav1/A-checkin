@@ -1,32 +1,49 @@
 # https://github.com/mybdye 🌟
 
 
-import os, requests, urllib, pydub, base64, ssl
+import base64
+import os
+import pydub
+import requests
+import ssl
+import urllib
+
 from seleniumbase import SB
+
+
+def url_open():
+    try:
+        sb.open(urlLogin)
+        sb.assert_element('#email', timeout=20)
+        print('- access')
+        return True
+    except Exception as e:
+        print('- 👀 sb.open(urlLogin)', e)
+        return False
+
+
+def recaptcha_checkbox():
+    try:
+        sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
+        print('- switch to frame checkbox')
+        checkboxElement = 'span#recaptcha-anchor'
+        print('- click checkboxElement')
+        sb.click(checkboxElement)
+        sb.sleep(4)
+        recaptcha()
+        # return True
+    except Exception as e:
+        print('- 👀 def recaptcha_checkbox():', e)
+        # return False
 
 
 def recaptcha():
     global body
     print('- recaptcha')
-    try:
-        sb.open(urlLogin)
-        sb.assert_element('#email', timeout=20)
-        print('- access')
-    except Exception as e:
-        print('👀 ', e, '\n try again!')
-        sb.open(urlLogin)
-        sb.assert_element('#email', timeout=20)
-        print('- access')
-    #   reCAPTCHA
-    sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
-    print('- switch to frame checkbox')
-    checkbox = 'span#recaptcha-anchor'
-    print('- click checkbox')
-    sb.click(checkbox)
-    sb.sleep(4)
+
     #   预防弹了广告
-    #sb.switch_to_window(0)
-    #sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
+    # sb.switch_to_window(0)
+    # sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/anchor?"]')
     status = checkbox_status()
     tryReCAPTCHA = 1
     while status != 'true':
@@ -291,7 +308,8 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
     print('- 🚀 loading...')
     if urlBase != '' and username != '' and password != '':
         try:
-            if recaptcha():
+            if url_open():
+                recaptcha_checkbox()
                 if login():
                     if not checkinstatus():
                         checkin()
