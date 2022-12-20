@@ -279,8 +279,8 @@ checkinStatusList = ('[id*="checkin"]', '[class*="card-action"]',
                      '[class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2 disabled"]')
 checkinButtonList = ('#checkin', 'a[onclick*="checkin()"]')
 trafficInfoList = (
-'div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > span:nth-child(1)', '#remain',
-'.bg-diagonal-light-success > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1)')
+    'div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', '#remain',
+    '.bg-diagonal-light-success > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1)')
 with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if not set
     if urlUserPasswd != '':
         account = urlUserPasswd.split(',')
@@ -317,7 +317,6 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                         recaptcha(audioMP3, audioWAV)
                     if login(username, password, loginButton):
                         status = checkin_status(checkinStatus)
-                        print('status:', status, status[0], status[1])
                         if not status[0]:
                             checkin(checkinButton)
                         sb.sleep(2)
