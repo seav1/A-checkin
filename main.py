@@ -323,9 +323,8 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                         sb.sleep(2)
                         traffic = traffic_info(urlUser, trafficInfo)
                         sb.sleep(4)
-                        print(urlBase.split('.')[-2])
                         body.append('账号：%s\n%s\n%s***\n签到状态：%s\n剩余流量：%s' % (
-                        i + 1, urlBase.split('.')[-2], username[:3], status[1], traffic))
+                            i + 1, urlBase.split('.')[-2], username[:3], status[1], traffic))
                         # print('- body:', body)
             except Exception as e:
                 print('💥', e)
@@ -335,7 +334,10 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                 except:
                     # push(e)
                     body.append('账号：%s\n%s\n%s*\n%s' % (i + 1, urlBase.split('.')[-2], username[:3], e))
-        push(body)
+        pushbody = ''
+        for i in range(len(body)):
+            pushbody += body[i] + '\n---\n'
+        push(pushbody)
     else:
         print('- please check urlBase/username/password')
 
