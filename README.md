@@ -1,4 +1,4 @@
-[![Checkin](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml/badge.svg)](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml)
+[![Checkin](https://github.com/mybdye/A-checkin/actions/workflows/main.yml/badge.svg)](https://github.com/mybdye/A-checkin/actions/workflows/main.yml)
 #### ⏱️ TODO
   - None
 
