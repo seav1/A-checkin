@@ -1,21 +1,21 @@
 # https://github.com/mybdye 🌟
 
-
 import base64
 import os
-import pydub
-import requests
 import ssl
+import time
 import urllib
 
+import pydub
+import requests
 from seleniumbase import SB
 
 
-def url_open():
+def url_open(urlLogin):
     try:
         sb.open(urlLogin)
         sb.assert_element('#email', timeout=20)
-        print('- access')
+        print('- page access')
         return True
     except Exception as e:
         print('- 👀 sb.open(urlLogin)', e)
@@ -30,14 +30,13 @@ def recaptcha_checkbox():
         print('- click checkboxElement')
         sb.click(checkboxElement)
         sb.sleep(4)
-        recaptcha()
-        # return True
+        return True
     except Exception as e:
         print('- 👀 def recaptcha_checkbox():', e)
-        # return False
+        return False
 
 
-def recaptcha():
+def recaptcha(audioMP3, audioWAV):
     global body
     print('- recaptcha')
 
@@ -60,8 +59,8 @@ def recaptcha():
             print('- audio src:', src)
             # download audio file
             urllib.request.urlretrieve(src, os.getcwd() + audioMP3)
-            mp3_to_wav()
-            text = speech_to_text()
+            mp3_to_wav(audioMP3, audioWAV)
+            text = speech_to_text(audioWAV)
             sb.switch_to_window(0)
             sb.assert_element('#email', timeout=20)
             sb.switch_to_default_content()  # Exit all iframes
@@ -95,16 +94,14 @@ def recaptcha():
         return True
 
 
-def login():
+def login(username, password, loginButton):
     print('- login')
     sb.switch_to_default_content()  # Exit all iframes
     sb.sleep(1)
     sb.type('#email', username)
     sb.type('input[type="password"]', password)
-    sb.click('button[type="submit"]')
+    sb.click(loginButton)
     sb.sleep(6)
-    #sb.assert_exact_text('用户中心', '[class*="badge badge-success"]')
-    #sb.assert_text('用户中心', 'h1', timeout=20)
     assert '/user' in sb.get_current_url()
     print('- login success')
     dialogRead()
@@ -120,15 +117,16 @@ def checkbox_status():
     return status
 
 
-def mp3_to_wav():
+def mp3_to_wav(audioMP3, audioWAV):
     print('- mp3_to_wav')
+
     pydub.AudioSegment.from_mp3(
         os.getcwd() + audioMP3).export(
         os.getcwd() + audioWAV, format="wav")
     print('- mp3_to_wav done')
 
 
-def speech_to_text():
+def speech_to_text(audioWAV):
     print('- speech_to_text')
     sb.open_new_window()
     text = ''
@@ -151,21 +149,16 @@ def speech_to_text():
         trySpeech += 1
     return text
 
-def checkinstatus():
+
+def checkin_status(checkinStatus):
     global body
-    print('- checkinstatus')
-    try:
-        status = sb.get_text('[class*="card-action"]')
-    except Exception as e:
-        print('- 👀 checkin status:', e)
-        status = sb.get_text('#checkin-div')
+    print('- checkin_status')
+    status = sb.get_text(checkinStatus)
     print('- status:', status)
     if '已' in status or '再' in status or '明' in status:
-        body = status
-        return True
+        return True, status
     else:
-        body = '执行签到'
-        return False
+        return False, status
     
 def dialogRead():
     print('- dialog read')
@@ -173,42 +166,34 @@ def dialogRead():
         sb.click('Read')
     except Exception as e:
         print('- 👀 dialog read:', e)
-        
-def checkin():
-    global body
+
+
+def checkin(checkinButton):
     print('- checkin')
-    try:
-        sb.click('#checkin')
-    except Exception as e:
-        print('- 👀 checkin button:', e)
-        sb.click('a[onclick="checkin()"]')
+    sb.click(checkinButton)
     print('- checkin clicked')
-        
-def trafficInfo():
+
+
+def traffic_info(urlUser, trafficInfo):
     print('- get traffic')
     sb.open(urlUser)
     assert '/user' in sb.get_current_url()
     dialogRead()
     sb.sleep(2)
-    try:
-        #traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', by='css selector')
-        traffic = sb.get_text('div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2)', by='css selector')
-    except Exception as e:
-        print('- 👀 trafficInfo:', e)
-        traffic = sb.get_text('#remain')
-    print('- trafficInfo:', traffic)
+    traffic = sb.get_text(trafficInfo)
+    print('- traffic:', traffic)
     return traffic
 
 
-def screenshot():
+def screenshot(urlBase):
     global body
     print('- screenshot')
-    sb.save_screenshot(imgFile, folder=os.getcwd())
+    sb.save_screenshot(urlBase + '.png', folder=os.getcwd())
     print('- screenshot done')
     sb.open_new_window()
     print('- screenshot upload')
     sb.open('http://imgur.com/upload')
-    sb.choose_file('input[type="file"]', os.getcwd() + '/' + imgFile)
+    sb.choose_file('input[type="file"]', os.getcwd() + '/' + urlBase + '.png')
     sb.sleep(6)
     imgUrl = sb.get_current_url()
     i = 1
@@ -216,11 +201,10 @@ def screenshot():
         if i > 3:
             break
         print('- waiting for url... *', i)
-        sb.sleep(2)
+        sb.sleep(5)
         imgUrl = sb.get_current_url()
         i += 1
     print('- 📷 img url:', imgUrl)
-    body = imgUrl
     print('- screenshot upload done')
 
     return imgUrl
@@ -237,7 +221,7 @@ def push(body):
         print('*** No BARK_KEY ***')
     else:
         barkurl = 'https://api.day.app/' + barkToken
-        title = urlBase
+        title = 'A-checkin'
         rq_bark = requests.get(url=f'{barkurl}/{title}/{body}?isArchive=1')
         if rq_bark.status_code == 200:
             print('- bark push Done!')
@@ -247,7 +231,7 @@ def push(body):
     if tgBotToken == '' or tgUserID == '':
         print('*** No TG_BOT_TOKEN or TG_USER_ID ***')
     else:
-        body = urlBase + '\n\n' + body
+        body = 'A-checkin' + '\n\n' + body
         server = 'https://api.telegram.org'
         tgurl = server + '/bot' + tgBotToken + '/sendMessage'
         rq_tg = requests.post(tgurl, data={'chat_id': tgUserID, 'text': body}, headers={
@@ -261,20 +245,10 @@ def push(body):
 
 ##
 try:
-    urlBase = os.environ['URL_BASE']
+    urlUserPasswd = os.environ['URL_USER_PASSWD']
 except:
-    # 本地调试用， please type here the website address without any 'https://' or '/'
-    urlBase = ''
-try:
-    username = os.environ['USERNAME']
-except:
-    # 本地调试用
-    username = ''
-try:
-    password = os.environ['PASSWORD']
-except:
-    # 本地调试用
-    password = ''
+    # 本地调试用， without any 'https://' or '/'
+    urlUserPasswd = ''
 try:
     barkToken = os.environ['BARK_TOKEN']
 except:
@@ -291,36 +265,76 @@ except:
     # 本地调试用
     tgUserID = ''
 ##
-body = ''
-statuRenew = False
-audioMP3 = '/' + urlBase + '.mp3'
-audioWAV = '/' + urlBase + '.wav'
-imgFile = urlBase + '.png'
-##
-urlLogin = 'https://' + urlBase + '/auth/login'
-urlUser = 'https://' + urlBase + '/user'
+body = []
+ts = []
+# Speech2text
 urlSpeech = url_decode(
     'aHR0cHM6Ly9henVyZS5taWNyb3NvZnQuY29tL2VuLXVzL3Byb2R1Y3RzL2NvZ25pdGl2ZS1zZXJ2aWNlcy9zcGVlY2gtdG8tdGV4dC8jZmVhdHVyZXM==')
 # 关闭证书验证
 ssl._create_default_https_context = ssl._create_unverified_context
 
-with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if not set.
-    print('- 🚀 loading...')
-    if urlBase != '' and username != '' and password != '':
-        try:
-            if url_open():
-                recaptcha_checkbox()
-                if login():
-                    if not checkinstatus():
-                        checkin()
-                    sb.sleep(2)
-                    body = body + '，' + trafficInfo()
-        except Exception as e:
-            print('💥', e)
+# ikuxx, qsy, xly
+loginButtonList = ('button[type="submit"]', 'button[type="button"]')
+checkinStatusList = ('[id*="checkin"]', '[class*="card-action"]',
+                     '[class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2 disabled"]')
+checkinButtonList = ('#checkin', 'a[onclick*="checkin()"]')
+trafficInfoList = (
+'div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > span:nth-child(1)', '#remain',
+'.bg-diagonal-light-success > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1)')
+with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if not set
+    if urlUserPasswd != '':
+        account = urlUserPasswd.split(',')
+        accountNumber = int(len(account) / 3)
+        print('- Number of accounts：', accountNumber)
+        for i in range(accountNumber):
+            print('- Start account %s' % (i + 1))
+            urlBase = account[i * 3]
+            username = account[i * 3 + 1]
+            password = account[i * 3 + 2]
+            urlLogin = 'https://' + urlBase + '/auth/login'
+            urlUser = 'https://' + urlBase + '/user'
+            audioMP3 = '/' + urlBase + '.mp3'
+            audioWAV = '/' + urlBase + '.wav'
+            time.sleep(1)
+            if 'ikuuu' in urlBase:
+                loginButton = loginButtonList[0]
+                checkinStatus = checkinStatusList[0]
+                checkinButton = checkinButtonList[1]
+                trafficInfo = trafficInfoList[0]
+            elif 'qiushiyun' in urlBase:
+                loginButton = loginButtonList[0]
+                checkinStatus = checkinStatusList[1]
+                checkinButton = checkinButtonList[1]
+                trafficInfo = trafficInfoList[1]
+            elif 'xiaolongyun' in urlBase:
+                loginButton = loginButtonList[1]
+                checkinStatus = checkinStatusList[2]
+                checkinButton = checkinButtonList[0]
+                trafficInfo = trafficInfoList[2]
             try:
-                screenshot()
-            finally:
-                push(e)
+                if url_open(urlLogin):
+                    if recaptcha_checkbox():
+                        recaptcha(audioMP3, audioWAV)
+                    if login(username, password, loginButton):
+                        status = checkin_status(checkinStatus)
+                        print('status:', status, status[0], status[1])
+                        if not status[0]:
+                            checkin(checkinButton)
+                        sb.sleep(2)
+                        traffic = traffic_info(urlUser, trafficInfo)
+                        sb.sleep(4)
+                        print(urlBase.split('.')[-2])
+                        body.append('账号：%s\n%s\n%s***\n签到状态：%s\n剩余流量：%s' % (
+                        i + 1, urlBase.split('.')[-2], username[:3], status[1], traffic))
+                        # print('- body:', body)
+            except Exception as e:
+                print('💥', e)
+                try:
+                    imgUrl = screenshot(urlBase)
+                    body.append('账号：%s\n%s\n%s***\n%s\n%s' % (i + 1, urlBase.split('.')[-2], username[:3], e, imgUrl))
+                except:
+                    # push(e)
+                    body.append('账号：%s\n%s\n%s*\n%s' % (i + 1, urlBase.split('.')[-2], username[:3], e))
         push(body)
     else:
         print('- please check urlBase/username/password')
