@@ -1,9 +1,9 @@
 [![Checkin](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml/badge.svg)](https://github.com/mybdye/A-checkin-reCAPTCHA/actions/workflows/main.yml)
 #### ⏱️ TODO
-  - [ ] 无 recaptcha 判断
-  - [ ] 多账号
+  - None
 
 #### ✏️ NOTE
+- 12.20 Multi-account test, add xly
 - 12.08 compatible with 'ikuxx' and 'qsy'
 - 11.06 rebuild
   - [x] ~~helium/selenium/Playwright~~ >> SeleniumBase
@@ -34,9 +34,7 @@ schedule:
 #### ㊙️ SECRET
   |YOU SECRET NAME|YOU SECRET VALUE|
   |-----|--|
-  |`URL_BASE`|网址，不要带有`https://` 和 `/` |
-  |`USERNAME`|你的用户名|
-  |`PASSWORD`|你的密码|
+  |`URL_USER_PASSWD`|逗号分隔<br>单账号`abc.com,username,password`<br>多账号`a1.com,username1,password1,b2.com,username2,password2`<br>不要带有`https://` 和 `/` |
   |`BARK_TOKEN`|(可选) api.day.app/`BARK_TOKEN`/ 详见 https://github.com/Finb/Bark|
   |`TG_BOT_TOKEN`|(可选) `xxxxxx:xxxxxxxxxxxxx`|
   |`TG_USER_ID`|(可选) 给 bot `@userinfobot` 发送 `/start`|
