@@ -5,7 +5,6 @@ import os
 import ssl
 import time
 import urllib
-
 import pydub
 import requests
 from seleniumbase import SB
@@ -37,7 +36,6 @@ def recaptcha_checkbox():
 
 
 def recaptcha(audioMP3, audioWAV):
-    global body
     print('- recaptcha')
 
     #   预防弹了广告
@@ -76,14 +74,12 @@ def recaptcha(audioMP3, audioWAV):
 
         except Exception as e:
             print('- 💣 Exception:', e)
-            body = e
             sb.switch_to_default_content()  # Exit all iframes
             sb.sleep(1)
             sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
             msgBlock = '[class*="rc-doscaptcha-body-text"]'
             if sb.assert_element(msgBlock):
-                body = sb.get_text(msgBlock)
-                print('- 💣 maybe block by google', body)
+                print('- 💣 maybe block by google', sb.get_text(msgBlock))
                 break
             elif tryReCAPTCHA > 3:
                 break
@@ -151,7 +147,6 @@ def speech_to_text(audioWAV):
 
 
 def checkin_status(checkinStatus):
-    global body
     print('- checkin_status')
     status = sb.get_text(checkinStatus)
     print('- status:', status)
@@ -186,7 +181,6 @@ def traffic_info(urlUser, trafficInfo):
 
 
 def screenshot(urlBase):
-    global body
     print('- screenshot')
     sb.save_screenshot(urlBase + '.png', folder=os.getcwd())
     print('- screenshot done')
