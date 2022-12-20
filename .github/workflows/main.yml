@@ -2,8 +2,8 @@
 name: Checkin
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
 #   pull_request:
 #     branches: [ "main" ]
   schedule:
@@ -16,7 +16,7 @@ jobs:
   Checkin:
     runs-on: ubuntu-latest
     # 超时设置
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,9 +49,7 @@ jobs:
           
       - name: Checkin
         env:
-          URL_BASE: ${{ secrets.URL_BASE }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PASSWORD: ${{ secrets.PASSWORD }}
+          URL_USER_PASSWD: ${{ secrets.URL_USER_PASSWD }}
           BARK_TOKEN: ${{ secrets.BARK_TOKEN }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_USER_ID: ${{ secrets.TG_USER_ID }}
