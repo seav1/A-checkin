@@ -267,7 +267,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # ikuxx, qsy, xly
 loginButtonList = ('button[type="submit"]', 'button[type="button"]')
 checkinStatusList = ('[id*="checkin"]', '[class*="card-action"]',
-                     '[class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2 disabled"]')
+                     '.btn-transparent-white')
 checkinButtonList = ('#checkin', 'a[onclick*="checkin()"]')
 trafficInfoList = (
     'div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', '#remain',
@@ -284,9 +284,9 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             password = account[i * 3 + 2]
             urlLogin = 'https://' + urlBase + '/auth/login'
             urlUser = 'https://' + urlBase + '/user'
-            audioMP3 = '/' + urlBase + (i + 1) + '.mp3'
-            audioWAV = '/' + urlBase + (i + 1) + '.wav'
-            imgFile = urlBase + (i + 1) +  '.png'
+            audioMP3 = '/' + urlBase + str(i + 1) + '.mp3'
+            audioWAV = '/' + urlBase + str(i + 1) + '.wav'
+            imgFile = urlBase + str(i + 1) +  '.png'
             time.sleep(1)
             if 'ikuuu' in urlBase:
                 loginButton = loginButtonList[0]
@@ -300,7 +300,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                 trafficInfo = trafficInfoList[1]
             elif 'xiaolongyun' in urlBase:
                 loginButton = loginButtonList[1]
-                checkinStatus = checkinStatusList[0]
+                checkinStatus = checkinStatusList[2]
                 checkinButton = checkinButtonList[0]
                 trafficInfo = trafficInfoList[2]
             try:
