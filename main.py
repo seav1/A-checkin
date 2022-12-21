@@ -316,21 +316,21 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                         sb.sleep(2)
                         traffic = traffic_info(urlUser, trafficInfo)
                         sb.sleep(4)
-                        body.append('账号(%s/%s):[%s|%s***]\n签到状态：%s\n剩余流量：%s' % (
+                        body.append('账号(%s/%s):[%s-%s***]\n签到状态：%s\n剩余流量：%s' % (
                             i + 1, accountNumber, urlBase.split('.')[-2], username[:3], status[1], traffic))
                         # print('- body:', body)
             except Exception as e:
                 print('- 💥', e)
                 try:
                     imgUrl = screenshot(imgFile)
-                    body.append('账号(%s/%s):[%s|%s***]\n%s\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e, imgUrl))
+                    body.append('账号(%s/%s):[%s-%s***]\n%s\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e, imgUrl))
                 except:
                     # push(e)
-                    body.append('账号(%s/%s):[%s|%s***]\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e))
+                    body.append('账号(%s/%s):[%s-%s***]\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e))
         pushbody = ''
         for i in range(len(body)):
             if i + 1 != len(body):
-                pushbody += body[i] +'\n---\n'
+                pushbody += body[i] +'\n- - -\n'
             else:
                 pushbody += body[i]
         push(pushbody)
