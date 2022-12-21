@@ -285,9 +285,9 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
     if urlUserPasswd != '':
         account = urlUserPasswd.split(',')
         accountNumber = int(len(account) / 3)
-        print('- 🍍Number of accounts：', accountNumber)
+        print('- 🍍 Number of accounts: %s' % accountNumber)
         for i in range(accountNumber):
-            print('- 🍌Start account %s' % (i + 1))
+            print('- 🍌 Start account: %s' % (i + 1))
             urlBase = account[i * 3]
             username = account[i * 3 + 1]
             password = account[i * 3 + 2]
