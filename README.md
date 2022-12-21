@@ -3,12 +3,17 @@
   - None
 
 #### ✏️ NOTE
-- 12.20 Multi-account test, add xly
+- 12.21
+    - fix 'qsy' checkin button
+    - update screenshot func, file path
+    - get latest checkin_status after checkin
+- 12.20 Multi-account test, add 'xly'
 - 12.08 compatible with 'ikuxx' and 'qsy'
 - 11.06 rebuild
-  - [x] ~~helium/selenium/Playwright~~ >> SeleniumBase
-  - [x] ~~MacOS/Windows~~ >> Ubuntu
-  * 每次运行时间约 1 分钟
+    - [x] ~~helium/selenium/Playwright~~ >> SeleniumBase
+    - [x] ~~MacOS/Windows~~ >> Ubuntu
+
+    * 每次运行时间约 1~3 分钟
 
 #### 🌟️ SUGGESTION
 ```diff
@@ -32,12 +37,14 @@ schedule:
 ```
 
 #### ㊙️ SECRET
-  |YOU SECRET NAME|YOU SECRET VALUE|
-  |-----|--|
-  |`URL_USER_PASSWD`|逗号分隔<br>单账号`abc.com,username,password`<br>多账号`a1.com,username1,password1,b2.com,username2,password2`<br>不要带有`https://` 和 `/` |
-  |`BARK_TOKEN`|(可选) api.day.app/`BARK_TOKEN`/ 详见 https://github.com/Finb/Bark|
-  |`TG_BOT_TOKEN`|(可选) `xxxxxx:xxxxxxxxxxxxx`|
-  |`TG_USER_ID`|(可选) 给 bot `@userinfobot` 发送 `/start`|
+
+|YOU SECRET NAME|YOU SECRET VALUE|
+|-----|--|
+|`URL_USER_PASSWD`|逗号`,`分隔<br>单账号`abc.com,username,password`<br>
+多账号`a1.com,username1,password1,b2.com,username2,password2`<br>不要带有`https://` 和 `/` |
+|`BARK_TOKEN`|(可选) api.day.app/`BARK_TOKEN`/ 详见 https://github.com/Finb/Bark|
+|`TG_BOT_TOKEN`|(可选) `xxxxxx:xxxxxxxxxxxxx`|
+|`TG_USER_ID`|(可选) 给 bot `@userinfobot` 发送 `/start`|
 
 #### 📚 THANKS
 - [SeleniumBase](https://github.com/seleniumbase)
