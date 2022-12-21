@@ -206,7 +206,7 @@ def screenshot(imgFile):
         imgUrl = sb.get_current_url()
         i += 1
     print('- 📷 img url: %s\n- screenshot upload done' % imgUrl)
-    sb.driver.close()
+    #sb.driver.close()
     return imgUrl
 
 
@@ -276,7 +276,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # ikuxx, qsy, xly
 loginButtonList = ('button[type="submit"]', 'button[type="button"]')
 checkinStatusList = ('[id*="checkin"]', '[class*="card-action"]',
-                     '.btn-transparent-white')
+                     '[class*="white font-weight-bold py-3 px-6"]')
 checkinButtonList = ('#checkin', 'a[onclick*="checkin()"]')
 trafficInfoList = (
     'div.col-lg-3:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)', '#remain',
