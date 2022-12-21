@@ -214,9 +214,9 @@ def push(body):
         print('*** No BARK_KEY ***')
     else:
         barkurl = 'https://api.day.app/' + barkToken
-        title = 'A-checkin'
-        body = quote(body, safe='')
-        rq_bark = requests.get(url=f'{barkurl}/{title}/{body}?isArchive=1')
+        barktitle = 'A-checkin'
+        barkbody = quote(body, safe='')
+        rq_bark = requests.get(url=f'{barkurl}/{barktitle}/{barkbody}?isArchive=1')
         if rq_bark.status_code == 200:
             print('- bark push Done!')
         else:
