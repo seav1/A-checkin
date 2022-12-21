@@ -40,8 +40,7 @@ schedule:
 
 |YOU SECRET NAME|YOU SECRET VALUE|
 |-----|--|
-|`URL_USER_PASSWD`|逗号`,`分隔<br>单账号`abc.com,username,password`<br>
-多账号`a1.com,username1,password1,b2.com,username2,password2`<br>不要带有`https://` 和 `/` |
+|`URL_USER_PASSWD`|逗号`,`分隔<br>单账号`abc.com,username,password`<br>多账号`a1.com,username1,password1,b2.com,username2,password2`<br>不要带有`https://` 和 `/` |
 |`BARK_TOKEN`|(可选) api.day.app/`BARK_TOKEN`/ 详见 https://github.com/Finb/Bark|
 |`TG_BOT_TOKEN`|(可选) `xxxxxx:xxxxxxxxxxxxx`|
 |`TG_USER_ID`|(可选) 给 bot `@userinfobot` 发送 `/start`|
