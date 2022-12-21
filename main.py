@@ -8,6 +8,7 @@ import urllib
 import pydub
 import requests
 from seleniumbase import SB
+from urllib.parse import quote
 
 
 def url_open(urlLogin):
@@ -214,6 +215,7 @@ def push(body):
     else:
         barkurl = 'https://api.day.app/' + barkToken
         title = 'A-checkin'
+        body = quote(body, safe='')
         rq_bark = requests.get(url=f'{barkurl}/{title}/{body}?isArchive=1')
         if rq_bark.status_code == 200:
             print('- bark push Done!')
