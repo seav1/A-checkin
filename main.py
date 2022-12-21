@@ -293,9 +293,9 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             password = account[i * 3 + 2]
             urlLogin = 'https://' + urlBase + '/auth/login'
             urlUser = 'https://' + urlBase + '/user'
-            audioMP3 = '/' + urlBase + str(i + 1) + '.mp3'
-            audioWAV = '/' + urlBase + str(i + 1) + '.wav'
-            imgFile = urlBase + str(i + 1) +  '.png'
+            audioMP3 = '/' + urlBase.split('.')[-2] + str(i + 1) + '.mp3'
+            audioWAV = '/' + urlBase.split('.')[-2] + str(i + 1) + '.wav'
+            imgFile = urlBase.split('.')[-2] + str(i + 1) + '.png'
             time.sleep(1)
             if 'ikuuu' in urlBase:
                 loginButton = loginButtonList[0]
