@@ -62,7 +62,7 @@ def recaptcha(audioMP3, audioWAV):
             text = speech_to_text(audioWAV)
             sb.switch_to_window(0)
             sb.switch_to_default_content()  # Exit all iframes
-            sb.assert_element('#email', timeout=20)
+            #sb.assert_element('#email', timeout=20)
             sb.sleep(1)
             sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
             sb.type('#audio-response', text)
@@ -298,7 +298,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             elif 'qiushiyun' in urlBase:
                 loginButton = loginButtonList[0]
                 checkinStatus = checkinStatusList[1]
-                checkinButton = checkinButtonList[1]
+                checkinButton = checkinButtonList[0]
                 trafficInfo = trafficInfoList[1]
             elif 'xiaolongyun' in urlBase:
                 loginButton = loginButtonList[1]
