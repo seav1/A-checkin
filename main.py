@@ -320,9 +320,10 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                         status = checkin_status(checkinStatus)
                         if not status[0]:
                             checkin(checkinButton)
-                        sb.sleep(2)
+                        sb.sleep(3)
                         traffic = traffic_info(urlUser, trafficInfo)
-                        sb.sleep(4)
+                        status = checkin_status(checkinStatus)
+                        sb.sleep(1)
                         body.append('账号(%s/%s): [%s-%s***]\n签到状态：%s\n剩余流量：%s' % (
                             i + 1, accountNumber, urlBase.split('.')[-2], username[:3], status[1], traffic))
                         # print('- body:', body)
