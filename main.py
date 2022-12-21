@@ -5,10 +5,12 @@ import os
 import ssl
 import time
 import urllib
+from urllib.parse import quote
+
 import pydub
+import pyscreenshot as ImageGrab
 import requests
 from seleniumbase import SB
-from urllib.parse import quote
 
 
 def url_open(urlLogin):
@@ -183,7 +185,11 @@ def traffic_info(urlUser, trafficInfo):
 
 def screenshot(imgFile):
     print('- screenshot')
-    sb.save_screenshot(imgFile, folder=os.getcwd())
+    # grab fullscreen
+    im = ImageGrab.grab()
+    # save image file
+    im.save(os.getcwd() + '/' + imgFile)
+    # sb.save_screenshot(imgFile, folder=os.getcwd())
     print('- screenshot done')
     sb.open_new_window()
     print('- screenshot upload')
@@ -200,6 +206,7 @@ def screenshot(imgFile):
         imgUrl = sb.get_current_url()
         i += 1
     print('- 📷 img url: %s\n- screenshot upload done' % imgUrl)
+    sb.driver.close()
     return imgUrl
 
 
