@@ -60,8 +60,8 @@ def recaptcha(audioMP3, audioWAV):
             mp3_to_wav(audioMP3, audioWAV)
             text = speech_to_text(audioWAV)
             sb.switch_to_window(0)
-            sb.assert_element('#email', timeout=20)
             sb.switch_to_default_content()  # Exit all iframes
+            sb.assert_element('#email', timeout=20)
             sb.sleep(1)
             sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
             sb.type('#audio-response', text)
@@ -73,7 +73,7 @@ def recaptcha(audioMP3, audioWAV):
             status = checkbox_status()
 
         except Exception as e:
-            print('- 💣 Exception:', e)
+            print('- 💣 recaptcha Exception:', e)
             sb.switch_to_default_content()  # Exit all iframes
             sb.sleep(1)
             sb.switch_to_frame('[src*="recaptcha.net/recaptcha/api2/bframe?"]')
@@ -180,14 +180,14 @@ def traffic_info(urlUser, trafficInfo):
     return traffic
 
 
-def screenshot(urlBase):
+def screenshot(imgFile):
     print('- screenshot')
-    sb.save_screenshot(urlBase + '.png', folder=os.getcwd())
+    sb.save_screenshot(imgFile, folder=os.getcwd())
     print('- screenshot done')
     sb.open_new_window()
     print('- screenshot upload')
     sb.open('http://imgur.com/upload')
-    sb.choose_file('input[type="file"]', os.getcwd() + '/' + urlBase + '.png')
+    sb.choose_file('input[type="file"]', os.getcwd() + '/' + imgFile)
     sb.sleep(6)
     imgUrl = sb.get_current_url()
     i = 1
@@ -198,8 +198,8 @@ def screenshot(urlBase):
         sb.sleep(5)
         imgUrl = sb.get_current_url()
         i += 1
-    print('- 📷 img url:', imgUrl)
-    print('- screenshot upload done')
+    print('- 📷 img url: %s\n- screenshot upload done' % imgUrl)
+ 
 
     return imgUrl
 
@@ -260,7 +260,6 @@ except:
     tgUserID = ''
 ##
 body = []
-ts = []
 # Speech2text
 urlSpeech = url_decode(
     'aHR0cHM6Ly9henVyZS5taWNyb3NvZnQuY29tL2VuLXVzL3Byb2R1Y3RzL2NvZ25pdGl2ZS1zZXJ2aWNlcy9zcGVlY2gtdG8tdGV4dC8jZmVhdHVyZXM==')
@@ -289,6 +288,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             urlUser = 'https://' + urlBase + '/user'
             audioMP3 = '/' + urlBase + '.mp3'
             audioWAV = '/' + urlBase + '.wav'
+            imgFile = urlBase + '.png'
             time.sleep(1)
             if 'ikuuu' in urlBase:
                 loginButton = loginButtonList[0]
@@ -302,7 +302,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                 trafficInfo = trafficInfoList[1]
             elif 'xiaolongyun' in urlBase:
                 loginButton = loginButtonList[1]
-                checkinStatus = checkinStatusList[2]
+                checkinStatus = checkinStatusList[0]
                 checkinButton = checkinButtonList[0]
                 trafficInfo = trafficInfoList[2]
             try:
@@ -316,22 +316,22 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                         sb.sleep(2)
                         traffic = traffic_info(urlUser, trafficInfo)
                         sb.sleep(4)
-                        body.append('账号：%s\n%s\n%s***\n签到状态：%s\n剩余流量：%s' % (
-                            i + 1, urlBase.split('.')[-2], username[:3], status[1], traffic))
+                        body.append('账号(%s/%s):[%s|%s***]\n签到状态：%s\n剩余流量：%s' % (
+                            i + 1, accountNumber, urlBase.split('.')[-2], username[:3], status[1], traffic))
                         # print('- body:', body)
             except Exception as e:
-                print('💥', e)
+                print('- 💥', e)
                 try:
-                    imgUrl = screenshot(urlBase)
-                    body.append('账号：%s\n%s\n%s***\n%s\n%s' % (i + 1, urlBase.split('.')[-2], username[:3], e, imgUrl))
+                    imgUrl = screenshot(imgFile)
+                    body.append('账号(%s/%s):[%s|%s***]\n%s\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e, imgUrl))
                 except:
                     # push(e)
-                    body.append('账号：%s\n%s\n%s*\n%s' % (i + 1, urlBase.split('.')[-2], username[:3], e))
+                    body.append('账号(%s/%s):[%s|%s***]\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e))
         pushbody = ''
         for i in range(len(body)):
             pushbody += body[i] + '\n---\n'
         push(pushbody)
     else:
-        print('- please check urlBase/username/password')
+        print('*** Please Check URL_USER_PASSWD ***')
 
 # END
