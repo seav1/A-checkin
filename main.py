@@ -199,8 +199,6 @@ def screenshot(imgFile):
         imgUrl = sb.get_current_url()
         i += 1
     print('- 📷 img url: %s\n- screenshot upload done' % imgUrl)
- 
-
     return imgUrl
 
 
@@ -286,9 +284,9 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             password = account[i * 3 + 2]
             urlLogin = 'https://' + urlBase + '/auth/login'
             urlUser = 'https://' + urlBase + '/user'
-            audioMP3 = '/' + urlBase + '.mp3'
-            audioWAV = '/' + urlBase + '.wav'
-            imgFile = urlBase + '.png'
+            audioMP3 = '/' + urlBase + (i + 1) + '.mp3'
+            audioWAV = '/' + urlBase + (i + 1) + '.wav'
+            imgFile = urlBase + (i + 1) +  '.png'
             time.sleep(1)
             if 'ikuuu' in urlBase:
                 loginButton = loginButtonList[0]
@@ -316,17 +314,17 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                         sb.sleep(2)
                         traffic = traffic_info(urlUser, trafficInfo)
                         sb.sleep(4)
-                        body.append('账号(%s/%s):[%s-%s***]\n签到状态：%s\n剩余流量：%s' % (
+                        body.append('账号(%s/%s): [%s-%s***]\n签到状态：%s\n剩余流量：%s' % (
                             i + 1, accountNumber, urlBase.split('.')[-2], username[:3], status[1], traffic))
                         # print('- body:', body)
             except Exception as e:
                 print('- 💥', e)
                 try:
                     imgUrl = screenshot(imgFile)
-                    body.append('账号(%s/%s):[%s-%s***]\n%s\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e, imgUrl))
+                    body.append('账号(%s/%s): [%s-%s***]\n%s\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e, imgUrl))
                 except:
                     # push(e)
-                    body.append('账号(%s/%s):[%s-%s***]\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e))
+                    body.append('账号(%s/%s): [%s-%s***]\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e))
         pushbody = ''
         for i in range(len(body)):
             if i + 1 != len(body):
