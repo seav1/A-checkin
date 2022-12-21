@@ -329,7 +329,10 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
                     body.append('账号(%s/%s):[%s|%s***]\n%s' % (i + 1, accountNumber, urlBase.split('.')[-2], username[:3], e))
         pushbody = ''
         for i in range(len(body)):
-            pushbody += body[i] + '\n---\n'
+            if i + 1 != len(body):
+                pushbody += body[i] +'\n---\n'
+            else:
+                pushbody += body[i]
         push(pushbody)
     else:
         print('*** Please Check URL_USER_PASSWD ***')
