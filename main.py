@@ -16,7 +16,7 @@ from seleniumbase import SB
 def url_open(urlLogin):
     try:
         sb.open(urlLogin)
-        sb.assert_element('#email', timeout=20)
+        sb.assert_element('#email', timeout=30)
         print('- page access')
         return True
     except Exception as e:
