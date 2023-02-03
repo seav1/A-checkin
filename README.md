@@ -1,6 +1,6 @@
 [![Checkin](https://github.com/mybdye/A-checkin/actions/workflows/main.yml/badge.svg)](https://github.com/mybdye/A-checkin/actions/workflows/main.yml)
 #### ⏱️ TODO
-  - None
+  - [Speech to text] needs an update
 
 #### ✏️ NOTE
 - 12.21
