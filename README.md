@@ -1,8 +1,11 @@
 [![Checkin](https://github.com/mybdye/A-checkin/actions/workflows/main.yml/badge.svg)](https://github.com/mybdye/A-checkin/actions/workflows/main.yml)
 #### ⏱️ TODO
-  - [Speech to text] needs an update
+  - None
 
 #### ✏️ NOTE
+2023
+- 02.04 fix [speech to text]
+2022
 - 12.21
     - fix 'qsy' checkin button
     - update screenshot func, file path
@@ -49,3 +52,4 @@ schedule:
 - [SeleniumBase](https://github.com/seleniumbase)
 - [Python](https://www.python.org/)
 - [PyCharm CE](https://www.jetbrains.com/pycharm/)
+- [Whisper](https://github.com/openai/whisper)
