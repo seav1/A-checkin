@@ -301,7 +301,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             try:
                 if url_open(urlLogin):
                     if recaptcha_checkbox():
-                        recaptcha(audioMP3, audioWAV)
+                        recaptcha(audioMP3)
                     if login(username, password, loginButton):
                         status = checkin_status(checkinStatus)
                         if not status[0]:
