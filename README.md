@@ -5,6 +5,7 @@
 #### ✏️ NOTE
 2023
 - 02.04 fix [speech to text]
+
 2022
 - 12.21
     - fix 'qsy' checkin button
