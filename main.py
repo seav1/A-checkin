@@ -1,5 +1,6 @@
 # https://github.com/mybdye 🌟
 
+import json
 import base64
 import os
 import ssl
@@ -60,8 +61,8 @@ def recaptcha(audioMP3, audioWAV):
             print('- audio src:', src)
             # download audio file
             urllib.request.urlretrieve(src, os.getcwd() + audioMP3)
-            mp3_to_wav(audioMP3, audioWAV)
-            text = speech_to_text(audioWAV)
+            # mp3_to_wav(audioMP3, audioWAV)
+            text = speech_to_text(audioMP3)
             sb.switch_to_window(0)
             sb.switch_to_default_content()  # Exit all iframes
             #sb.assert_element('#email', timeout=20)
@@ -125,7 +126,7 @@ def mp3_to_wav(audioMP3, audioWAV):
     print('- mp3_to_wav done')
 
 
-def speech_to_text(audioWAV):
+def speech_to_text(audioMP3):
     print('- speech_to_text')
     sb.open_new_window()
     text = ''
@@ -133,20 +134,25 @@ def speech_to_text(audioWAV):
     while trySpeech <= 3:
         print('- trySpeech *', trySpeech)
         sb.open(urlSpeech)
-        sb.assert_text('Speech to text', 'h1')
-        sb.choose_file('input[type="file"]', os.getcwd() + audioWAV)
+        sb.assert_text('Replicate', 'h1')
+        sb.choose_file('input[type="file"]', os.getcwd() + audioMP3)
+        sb.sleep(1)
+        submit = 'button[type="submit"]'
+        sb.click(submit)
         sb.sleep(5)
-        response = sb.get_text('[id*="speechout"]')
-        print('- response:', response)
-        try:
-            text = response.split('-' * 80)[1].split('\n')[1].replace('. ', '.')
-        except Exception as e:
-            print('- 👀 response.split:', e)
+        transcription = 'code[class="output w-full"]'
+        sb.wait_for_element(transcription)
+        text = sb.get_text(transcription)
         print('- text:', text)
-        if ' ' in text:
+#         try:
+#             text = response.split('-' * 80)[1].split('\n')[1].replace('. ', '.')
+#         except Exception as e:
+#             print('- 👀 response.split:', e)
+#         print('- text:', text)
+        if ' ' in text and len(text) > 0:
             break
         trySpeech += 1
-    return text
+    return json.loads(text)[0]['text']
 
 
 def checkin_status(checkinStatus):
@@ -268,8 +274,7 @@ except:
 ##
 body = []
 # Speech2text
-urlSpeech = url_decode(
-    'aHR0cHM6Ly9henVyZS5taWNyb3NvZnQuY29tL2VuLXVzL3Byb2R1Y3RzL2NvZ25pdGl2ZS1zZXJ2aWNlcy9zcGVlY2gtdG8tdGV4dC8jZmVhdHVyZXM==')
+urlSpeech = url_decode('aHR0cHM6Ly9yZXBsaWNhdGUuY29tL29wZW5haS93aGlzcGVy')
 # 关闭证书验证
 ssl._create_default_https_context = ssl._create_unverified_context
 
