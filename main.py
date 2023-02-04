@@ -151,7 +151,7 @@ def speech_to_text(audioMP3):
         if ' ' in text and len(text) > 0:
             break
         trySpeech += 1
-    return text
+    return text[0]['text']
 
 
 def checkin_status(checkinStatus):
