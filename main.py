@@ -136,7 +136,8 @@ def speech_to_text(audioMP3):
         sb.assert_text('Replicate', 'h1')
         sb.choose_file('input[type="file"]', os.getcwd() + audioMP3)
         sb.sleep(1)
-        sb.click(button[type="submit"])
+        submit = 'button[type="submit"]'
+        sb.click(submit)
         sb.sleep(5)
         transcription = 'code[class="output w-full"]'
         sb.wait_for_element(transcription)
