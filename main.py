@@ -1,5 +1,6 @@
 # https://github.com/mybdye 🌟
 
+import json
 import base64
 import os
 import ssl
@@ -151,7 +152,7 @@ def speech_to_text(audioMP3):
         if ' ' in text and len(text) > 0:
             break
         trySpeech += 1
-    return text[0]['text']
+    return json.loads(text)[0]['text']
 
 
 def checkin_status(checkinStatus):
