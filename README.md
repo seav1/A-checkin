@@ -53,4 +53,4 @@ schedule:
 - [SeleniumBase](https://github.com/seleniumbase)
 - [Python](https://www.python.org/)
 - [PyCharm CE](https://www.jetbrains.com/pycharm/)
-- [Openai Whisper](https://replicate.com/openai/whisper)
+- [Whisper](https://github.com/openai/whisper)

@@ -1,6 +1,7 @@
 # https://github.com/mybdye 🌟
 
 import json
+import whisper
 import base64
 import os
 import ssl
@@ -39,7 +40,7 @@ def recaptcha_checkbox():
         return False
 
 
-def recaptcha(audioMP3, audioWAV):
+def recaptcha(audioMP3):
     print('- recaptcha')
 
     #   预防弹了广告
@@ -60,7 +61,7 @@ def recaptcha(audioMP3, audioWAV):
                                    )[0].get_attribute("href")
             print('- audio src:', src)
             # download audio file
-            urllib.request.urlretrieve(src, os.getcwd() + audioMP3)
+            urllib.request.urlretrieve(src, audioMP3)
             # mp3_to_wav(audioMP3, audioWAV)
             text = speech_to_text(audioMP3)
             sb.switch_to_window(0)
@@ -117,42 +118,22 @@ def checkbox_status():
     return status
 
 
-def mp3_to_wav(audioMP3, audioWAV):
-    print('- mp3_to_wav')
-
-    pydub.AudioSegment.from_mp3(
-        os.getcwd() + audioMP3).export(
-        os.getcwd() + audioWAV, format="wav")
-    print('- mp3_to_wav done')
+# def mp3_to_wav(audioMP3, audioWAV):
+#     print('- mp3_to_wav')
+#
+#     pydub.AudioSegment.from_mp3(
+#         os.getcwd() + audioMP3).export(
+#         os.getcwd() + audioWAV, format="wav")
+#     print('- mp3_to_wav done')
 
 
 def speech_to_text(audioMP3):
     print('- speech_to_text')
-    sb.open_new_window()
-    text = ''
-    trySpeech = 1
-    while trySpeech <= 3:
-        print('- trySpeech *', trySpeech)
-        sb.open(urlSpeech)
-        sb.assert_text('Replicate', 'h1')
-        sb.choose_file('input[type="file"]', os.getcwd() + audioMP3)
-        sb.sleep(1)
-        submit = 'button[type="submit"]'
-        sb.click(submit)
-        sb.sleep(5)
-        transcription = 'code[class="output w-full"]'
-        sb.wait_for_element(transcription)
-        text = sb.get_text(transcription)
-        print('- text:', text)
-#         try:
-#             text = response.split('-' * 80)[1].split('\n')[1].replace('. ', '.')
-#         except Exception as e:
-#             print('- 👀 response.split:', e)
-#         print('- text:', text)
-        if ' ' in text and len(text) > 0:
-            break
-        trySpeech += 1
-    return json.loads(text)[0]['text']
+    model = whisper.load_model("tiny.en")
+    result = model.transcribe(audioMP3)
+    text = result["text"]
+    print('- text:', text)
+    return text
 
 
 def checkin_status(checkinStatus):
@@ -298,8 +279,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             password = account[i * 3 + 2]
             urlLogin = 'https://' + urlBase + '/auth/login'
             urlUser = 'https://' + urlBase + '/user'
-            audioMP3 = '/' + urlBase.split('.')[-2] + str(i + 1) + '.mp3'
-            audioWAV = '/' + urlBase.split('.')[-2] + str(i + 1) + '.wav'
+            audioMP3 = urlBase.split('.')[-2] + str(i + 1) + '.mp3'
             imgFile = urlBase.split('.')[-2] + str(i + 1) + '.png'
             time.sleep(1)
             if 'ikuuu' in urlBase:
@@ -320,7 +300,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             try:
                 if url_open(urlLogin):
                     if recaptcha_checkbox():
-                        recaptcha(audioMP3, audioWAV)
+                        recaptcha(audioMP3)
                     if login(username, password, loginButton):
                         status = checkin_status(checkinStatus)
                         if not status[0]:
