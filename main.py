@@ -61,7 +61,7 @@ def recaptcha(audioMP3):
                                    )[0].get_attribute("href")
             print('- audio src:', src)
             # download audio file
-            urllib.request.urlretrieve(src, os.getcwd() + audioMP3)
+            urllib.request.urlretrieve(src, audioMP3)
             # mp3_to_wav(audioMP3, audioWAV)
             text = speech_to_text(audioMP3)
             sb.switch_to_window(0)
@@ -279,8 +279,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             password = account[i * 3 + 2]
             urlLogin = 'https://' + urlBase + '/auth/login'
             urlUser = 'https://' + urlBase + '/user'
-            audioMP3 = '/' + urlBase.split('.')[-2] + str(i + 1) + '.mp3'
-            audioWAV = '/' + urlBase.split('.')[-2] + str(i + 1) + '.wav'
+            audioMP3 = urlBase.split('.')[-2] + str(i + 1) + '.mp3'
             imgFile = urlBase.split('.')[-2] + str(i + 1) + '.png'
             time.sleep(1)
             if 'ikuuu' in urlBase:

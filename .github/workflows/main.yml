@@ -21,18 +21,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         
-      - name: Setup Python version
+      - name: Setup Environment
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+          run: |
+            pip install --upgrade pip
+            pip install git+https://github.com/openai/whisper.git
+            pip install Pillow pyscreenshot
+            pip install -r ./requirements.txt
           cache: 'pip' # caching pip dependencies
-          
-      - name: Setup Environment
-        run: |
-          pip install --upgrade pip
-          pip install git+https://github.com/openai/whisper.git
-          pip install Pillow pyscreenshot
-          pip install -r ./requirements.txt
+
           
       - name: Delete old workflow runs
         uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
