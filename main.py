@@ -18,7 +18,7 @@ from seleniumbase import SB
 def url_open(urlLogin):
     try:
         sb.open(urlLogin)
-        sb.assert_element('email', timeout=30)
+        sb.assert_element('#email', timeout=30)
         print('- page access')
         return True
     except Exception as e:
@@ -99,7 +99,7 @@ def login(username, password, loginButton):
     print('- login')
     sb.switch_to_default_content()  # Exit all iframes
     sb.sleep(1)
-    sb.type('email', username)
+    sb.type('#email', username)
     sb.type('input[type="password"]', password)
     sb.click(loginButton)
     sb.sleep(6)
