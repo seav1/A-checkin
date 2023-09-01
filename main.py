@@ -277,7 +277,7 @@ with SB(uc=True, pls="none", sjw=True) as sb:  # By default, browser="chrome" if
             urlBase = account[i * 3]
             username = account[i * 3 + 1]
             password = account[i * 3 + 2]
-            urlLogin = https://ide-run.goorm.io/workspace/dGz54pALkYySfIqjBmp?token=ce166f5eccf285db2d818ed4c65a7c12&guestname=12
+            urlLogin = 'https://' + urlBase + '/auth/login'
             urlUser = 'https://' + urlBase + '/user'
             audioMP3 = urlBase.split('.')[-2] + str(i + 1) + '.mp3'
             imgFile = urlBase.split('.')[-2] + str(i + 1) + '.png'
